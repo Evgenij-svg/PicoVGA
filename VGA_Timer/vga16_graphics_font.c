@@ -71,25 +71,62 @@ static PT_THREAD (protothread_graphics(struct pt *pt)) {
     // Setup a 1Hz timer
     //static struct repeating_timer timer;
     //add_repeating_timer_ms(-1000, repeating_timer_callback, NULL, &timer);
-    static  short x = 200;
-    static  short y = 100;
-    static  short stepX = 1;
-    static  short stepY = 1;
+    static short min = 0;
+    static short sec = 0;
+    static short msec = 0;
+    setTextSize(4);
 
     while(true) {
-      drawCircle(x,y,10,BLACK);
-      if(x>620 || x<20){
-        stepX=stepX * -1;
-      }
-      if(y>460 || y<20){
-        stepY=stepY * -1;
-      }
-      x+=stepX;
-      y+=stepY;
+      msec++;
+      if(msec == 1000){
 
-      drawCircle(x,y,10,GREEN);
-      PT_YIELD_usec(10000) ;
-     }
+        char buffer[5];
+        setTextColor(BLACK);
+
+        setCursor(250, 240) ;
+        sprintf(buffer, "%d", sec);
+        writeString(buffer);
+
+        sec++;
+        msec = 0;
+
+        setTextColor(WHITE);
+        setCursor(250, 240) ;
+        sprintf(buffer, "%d", sec);
+        writeString(buffer);
+
+      }
+      if(sec == 60){
+        
+        char buffer[5];
+
+        setTextColor(BLACK);
+        setCursor(250, 240) ;
+        sprintf(buffer, "%d", sec);
+        writeString(buffer);
+
+        setCursor(180, 240) ;
+        sprintf(buffer, "%d", min);
+        writeString(buffer);
+
+        sec = 0;
+        min++;
+
+        setTextColor(WHITE);
+        setCursor(250, 240) ;
+        sprintf(buffer, "%d", sec);
+        writeString(buffer);
+
+        setCursor(180, 240) ;
+        sprintf(buffer, "%d", min);
+        writeString(buffer);
+        
+      }
+      
+
+
+      PT_YIELD_usec(1000);
+    }
 
 
 
